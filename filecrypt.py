@@ -1,4 +1,5 @@
 import sys
+from getpass import getpass
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import AES, PKCS1_OAEP
 from Crypto.Random import get_random_bytes
@@ -31,9 +32,12 @@ def encrypt_file(public_key_file, input_file):
 
 # Function to decrypt the file
 def decrypt_file(private_key_file, input_file):
+    # Prompt the user for the passphrase to decrypt the private key
+    passphrase = getpass("Enter the passphrase for your private key: ")
+
     # Read the recipient's private key
     with open(private_key_file, 'rb') as f:
-        private_key = RSA.import_key(f.read())
+        private_key = RSA.import_key(f.read(), passphrase=passphrase)
 
     # Read the encrypted file
     with open(input_file, 'rb') as f:
